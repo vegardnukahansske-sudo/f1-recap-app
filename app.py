@@ -58,7 +58,7 @@ def load_lap_data(year, race):
 pos = load_lap_data(year_choice, race_choice)
 
 
-    fig, ax = plt.subplots() # Line 54 - Ensure no extra spaces here
+    fig, ax = plt.subplots()
     ax.plot(pos['X'], pos['Y'])
     ax.axis('off')
 
