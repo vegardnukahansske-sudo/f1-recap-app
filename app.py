@@ -44,7 +44,12 @@ if st.button("Load Race"):
 
     st.subheader("Track Map")
 
-    session = fastf1.get_session(2026, 'Abu Dhabi', 'R')
+    # Create a dropdown menu for the race
+    race_choice = st.selectbox("Select Race", ["Bahrain", "Saudi Arabia", "Australia", "Japan", "China", "Miami"])
+
+    # Use the 'race_choice' variable instead of a fixed name
+    session = fastf1.get_session(2026, race_choice, 'R')
+
     session.load()
     lap = session.laps.pick_fastest()
     pos = lap.get_pos_data()
