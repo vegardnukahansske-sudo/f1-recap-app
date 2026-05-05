@@ -28,10 +28,8 @@ if st.button("Load Race"):
 
     res = session.results.copy()
 
-\
-
     # 1. Let the user choose the year and race
-    year_choice = st.selectbox("Select Year", [2025, 2026])
+    year_choice = st.selectbox("Select Year", [2020, 2021, 2022, 2023, 2024, 2025])
     race_choice = st.selectbox("Select Race", ["Bahrain", "Saudi Arabia", "Australia", "Miami", "Monaco", "Silverstone", "Abu Dhabi"])
 
     # 2. Update the session line to use your choices
@@ -45,19 +43,20 @@ if st.button("Load Race"):
     lap = session.laps.pick_fastest()
     pos = lap.get_pos_data()
     # 1. Let the user choose the year and race
-    year_choice = st.selectbox("Select Year", [2025, 2026])
-    race_choice = st.selectbox("Select Race", ["Bahrain", "Saudi Arabia", "Australia", "Miami", "Monaco", "Silverstone", "Abu Dhabi"])
+year_choice = st.selectbox("Select Year", [2025, 2026])
+race_choice = st.selectbox("Select Race", ["Bahrain", "Saudi Arabia", "Australia", "Miami", "Monaco", "Silverstone", "Abu Dhabi"])
 
-    # 2. Use a cached function to load the data (stops the Rate Limit error)
-    @st.cache_data
-    def load_lap_data(year, race):
+# 2. Use a cached function to load the data (stops the Rate Limit error)
+@st.cache_data
+def load_lap_data(year, race):
     session = fastf1.get_session(year, race, 'R')
     session.load(laps=True, telemetry=True, weather=False)
     lap = session.laps.pick_fastest()
     return lap.get_pos_data()
 
-    # 3. Get the coordinates using the choices from the dropdowns
-    pos = load_lap_data(year_choice, race_choice)
+# 3. Get the coordinates using the choices from the dropdowns
+pos = load_lap_data(year_choice, race_choice)
+
 
     fig, ax = plt.subplots() # Line 54 - Ensure no extra spaces here
     ax.plot(pos['X'], pos['Y'])
