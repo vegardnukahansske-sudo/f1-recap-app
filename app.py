@@ -44,9 +44,13 @@ if st.button("Load Race"):
 
     st.subheader("Track Map")
 
-    lap = session.laps.pick_fastest()
-    pos = lap.get_pos_data()
+    session = fastf1.get_session(2026, 'Abu Dhabi', 'R')
+session.load()  # This downloads the lap data so the next line works
+lap = session.laps.pick_fastest()
+pos = lap.get_pos_data() # Add this line to get the X and Y coordinates
 
+
+    
     fig, ax = plt.subplots()
     ax.plot(pos['X'], pos['Y'])
     ax.axis('off')
