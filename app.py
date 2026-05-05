@@ -28,24 +28,15 @@ if st.button("Load Race"):
 
     res = session.results.copy()
 
-    def safe_int(x):
-        try:
-            return int(x)
-        except:
-            return None
+\
 
-    res["Position"] = res["ClassifiedPosition"].apply(safe_int)
-    res = res.dropna(subset=["Position"]).sort_values("Position")
+    # 1. Let the user choose the year and race
+    year_choice = st.selectbox("Select Year", [2025, 2026])
+    race_choice = st.selectbox("Select Race", ["Bahrain", "Saudi Arabia", "Australia", "Miami", "Monaco", "Silverstone", "Abu Dhabi"])
 
-    res["Grid"] = res["GridPosition"].apply(lambda x: x if x > 0 else len(res))
-    res["Diff"] = res["Grid"] - res["Position"]
+    # 2. Update the session line to use your choices
+    session = fastf1.get_session(year_choice, race_choice, 'R')
 
-    st.dataframe(res[["Position","Abbreviation","TeamName","Grid","Diff","Status"]])
-
-    st.subheader("Track Map")
-
-    # Create a dropdown menu for the race
-    race_choice = st.selectbox("Select Race", ["Bahrain", "Saudi Arabia", "Australia", "Japan", "China", "Miami"])
 
     # Use the 'race_choice' variable instead of a fixed name
     session = fastf1.get_session(2026, race_choice, 'R')
@@ -53,6 +44,20 @@ if st.button("Load Race"):
     session.load()
     lap = session.laps.pick_fastest()
     pos = lap.get_pos_data()
+    # 1. Let the user choose the year and race
+    year_choice = st.selectbox("Select Year", [2025, 2026])
+    race_choice = st.selectbox("Select Race", ["Bahrain", "Saudi Arabia", "Australia", "Miami", "Monaco", "Silverstone", "Abu Dhabi"])
+
+    # 2. Use a cached function to load the data (stops the Rate Limit error)
+    @st.cache_data
+    def load_lap_data(year, race):
+    session = fastf1.get_session(year, race, 'R')
+    session.load(laps=True, telemetry=True, weather=False)
+    lap = session.laps.pick_fastest()
+    return lap.get_pos_data()
+
+    # 3. Get the coordinates using the choices from the dropdowns
+    pos = load_lap_data(year_choice, race_choice)
 
     fig, ax = plt.subplots() # Line 54 - Ensure no extra spaces here
     ax.plot(pos['X'], pos['Y'])
