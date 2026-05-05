@@ -4,7 +4,7 @@ import fastf1.plotting
 import pandas as pd
 import matplotlib.pyplot as plt
 
-fastf1.Cache.enable_cache('f1_cache')
+fastf1.Cache.enable_cache('/tmp/f1_cache')
 fastf1.plotting.setup_mpl()
 
 st.set_page_config(page_title="F1 Recap", layout="wide")
