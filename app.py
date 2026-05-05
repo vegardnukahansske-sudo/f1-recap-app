@@ -39,10 +39,7 @@ if st.button("Load Race"):
     # Use the 'race_choice' variable instead of a fixed name
     session = fastf1.get_session(2026, race_choice, 'R')
 
-    session.load()
-    lap = session.laps.pick_fastest()
-    pos = lap.get_pos_data()
-    # 1. Let the user choose the year and race
+   # 1. Let the user choose the year and race
 year_choice = st.selectbox("Select Year", [2025, 2026])
 race_choice = st.selectbox("Select Race", ["Bahrain", "Saudi Arabia", "Australia", "Miami", "Monaco", "Silverstone", "Abu Dhabi"])
 
@@ -54,12 +51,13 @@ def load_lap_data(year, race):
     lap = session.laps.pick_fastest()
     return lap.get_pos_data()
 
-# 3. Get the coordinates (Ensure this is flush to the left)
+# 3. Get the coordinates (Must be flush to the left)
 pos = load_lap_data(year_choice, race_choice)
 
-# 4. Plotting the Track Map (Ensure these are flush to the left)
+# 4. Plotting the Track Map (Must be flush to the left)
 fig, ax = plt.subplots()
 ax.plot(pos['X'], pos['Y'])
 ax.axis('off')
 
 st.pyplot(fig)
+ 
