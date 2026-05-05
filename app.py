@@ -46,7 +46,7 @@ if st.button("Load Race"):
 year_choice = st.selectbox("Select Year", [2025, 2026])
 race_choice = st.selectbox("Select Race", ["Bahrain", "Saudi Arabia", "Australia", "Miami", "Monaco", "Silverstone", "Abu Dhabi"])
 
-# 2. Use a cached function to load the data (stops the Rate Limit error)
+# 2. Cached function to load data (prevents RateLimitExceededError)
 @st.cache_data
 def load_lap_data(year, race):
     session = fastf1.get_session(year, race, 'R')
@@ -54,13 +54,12 @@ def load_lap_data(year, race):
     lap = session.laps.pick_fastest()
     return lap.get_pos_data()
 
-# 3. Get the coordinates using the choices from the dropdowns
+# 3. Get the coordinates (Ensure this is flush to the left)
 pos = load_lap_data(year_choice, race_choice)
 
+# 4. Plotting the Track Map (Ensure these are flush to the left)
+fig, ax = plt.subplots()
+ax.plot(pos['X'], pos['Y'])
+ax.axis('off')
 
-    fig, ax = plt.subplots()
-    ax.plot(pos['X'], pos['Y'])
-    ax.axis('off')
-
-    st.pyplot(fig)
-
+st.pyplot(fig)
